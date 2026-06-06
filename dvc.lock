@@ -1,0 +1,67 @@
+schema: '2.0'
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+    - path: data/train_u6lujuX_CVtuZ9i.csv
+      hash: md5
+      md5: 3bc055a1d2cca0386fa2d03864fe9b0a
+      size: 38013
+    - path: src/preprocess.py
+      hash: md5
+      md5: 246af8ade270e91b63bbc42b03eba090
+      size: 1125
+    outs:
+    - path: data/processed
+      hash: md5
+      md5: 5a48f004ec0fd86be8070bf92f08e482.dir
+      size: 26405
+      nfiles: 4
+  train:
+    cmd: python src/train.py
+    deps:
+    - path: data/processed/X_train.csv
+      hash: md5
+      md5: 9503c119b462ac333b97bb4bee99fd20
+      size: 19542
+    - path: data/processed/y_train.csv
+      hash: md5
+      md5: 80993df2e08017086edb83ef51312280
+      size: 1486
+    - path: params.yaml
+      hash: md5
+      md5: e488339f58fb8b08877020361b07b7db
+      size: 65
+    - path: src/train.py
+      hash: md5
+      md5: 950a0c88406b6898419e6dceacfd7a0c
+      size: 1139
+    outs:
+    - path: models/loan_model.pkl
+      hash: md5
+      md5: 0f3d8e2ae9c735e4ff35d2f8303497c8
+      size: 1690649
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+    - path: data/processed/X_test.csv
+      hash: md5
+      md5: 491e5faf9db201acb9251fa00224e491
+      size: 4995
+    - path: data/processed/y_test.csv
+      hash: md5
+      md5: d2749b18d9614d3085e6118f28ab76d7
+      size: 382
+    - path: models/loan_model.pkl
+      hash: md5
+      md5: 0f3d8e2ae9c735e4ff35d2f8303497c8
+      size: 1690649
+    - path: src/evaluate.py
+      hash: md5
+      md5: 616aad2373840f065b7fca868bf84b2f
+      size: 1168
+    outs:
+    - path: reports/metrics.txt
+      hash: md5
+      md5: 6570d1aa0ad8ba0b7e69ac75b00209e5
+      size: 366

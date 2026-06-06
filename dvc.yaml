@@ -1,0 +1,28 @@
+stages:
+  preprocess:
+    cmd: python src/preprocess.py
+    deps:
+      - src/preprocess.py
+      - data/train_u6lujuX_CVtuZ9i.csv
+    outs:
+      - data/processed
+
+  train:
+    cmd: python src/train.py
+    deps:
+      - src/train.py
+      - data/processed/X_train.csv
+      - data/processed/y_train.csv
+      - params.yaml
+    outs:
+      - models/loan_model.pkl
+
+  evaluate:
+    cmd: python src/evaluate.py
+    deps:
+      - src/evaluate.py
+      - models/loan_model.pkl
+      - data/processed/X_test.csv
+      - data/processed/y_test.csv
+    outs:
+      - reports/metrics.txt
