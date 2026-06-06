@@ -6,3 +6,6 @@ models/
 .dvc/tmp/
 .env
 mlflow.db
+evidently312/
+logs/
+data/processed/
