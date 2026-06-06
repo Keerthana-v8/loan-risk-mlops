@@ -4,3 +4,4 @@ __pycache__/
 models/
 .dvc/
 .env
+mlflow.db

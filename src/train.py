@@ -2,6 +2,8 @@ import pandas as pd
 import yaml
 import joblib
 import os
+import mlflow
+import mlflow.sklearn
 
 from sklearn.ensemble import RandomForestClassifier
 
@@ -16,19 +18,29 @@ random_state = params["model"]["random_state"]
 X_train = pd.read_csv("data/processed/X_train.csv")
 y_train = pd.read_csv("data/processed/y_train.csv")
 
-# Train model
-model = RandomForestClassifier(
-    n_estimators=n_estimators,
-    random_state=random_state
-)
+# Start MLflow experiment
+mlflow.set_experiment("Loan-Risk-Prediction")
 
-model.fit(X_train, y_train.values.ravel())
+with mlflow.start_run():
 
-# Create models folder
-os.makedirs("models", exist_ok=True)
+    mlflow.log_param("n_estimators", n_estimators)
+    mlflow.log_param("random_state", random_state)
 
-# Save model
-joblib.dump(model, "models/loan_model.pkl")
+    model = RandomForestClassifier(
+        n_estimators=n_estimators,
+        random_state=random_state
+    )
 
-print("Model trained successfully.")
-print("Model saved as models/loan_model.pkl")
+    model.fit(X_train, y_train.values.ravel())
+
+    os.makedirs("models", exist_ok=True)
+
+    joblib.dump(model, "models/loan_model.pkl")
+
+    mlflow.sklearn.log_model(
+        sk_model=model,
+        artifact_path="model"
+    )
+
+    print("Model trained successfully.")
+    print("Model saved as models/loan_model.pkl")
